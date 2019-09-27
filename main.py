@@ -21,7 +21,7 @@ connection = sqlite3.connect('userTasks.db', check_same_thread = False)
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
 
-updater = Updater(token = '978907297:AAFntZ3OU7sikGoCceZTdlYYBe94toTLL0U', use_context = True)
+updater = Updater(token = 'TOKEN', use_context = True)
 
 """Commands with database"""
 
@@ -93,7 +93,7 @@ def restricted(func):
     def wrapped(update, context, *args, **kwargs):
         user_id = update.effective_user.id
         if user_id not in LIST_OF_ADMINS:
-            context.bot.send_message(chat_id = update.message.chat_id, text = "К сожалению, это функция доступна только админам 😬")
+            context.bot.send_message(chat_id = update.message.chat_id, text = "К сожалению, это функция доступна только админам 😬", reply_markup = reply_markup)
             return
         return func(update, context, *args, **kwargs)
     return wrapped
@@ -115,7 +115,7 @@ def get_text(user_id):
 
 def cancel(update, context):
     user_id = update.message.from_user.id
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.cancelled_successfully)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.cancelled_successfully, reply_markup = reply_markup)
     return ConversationHandler.END
 
 @restricted
@@ -129,10 +129,10 @@ def admin_send_to_all(update, context):
             if ith > 1:
                 text = text + " " + word
         for sending_id in user_ids:
-            context.bot.send_message(chat_id = sending_id, text = text)
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response)
+            context.bot.send_message(chat_id = sending_id, text = text, reply_markup = reply_markup)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response, reply_markup = reply_markup)
 
 @restricted
 def admin_send_to(update, context):
@@ -144,29 +144,29 @@ def admin_send_to(update, context):
             ith = ith + 1
             if ith > 2:
                 text = text + " " + word
-        context.bot.send_message(chat_id = user_id, text = text)
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response)
+        context.bot.send_message(chat_id = user_id, text = text, reply_markup = reply_markup)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_error_command_response)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_error_command_response, reply_markup = reply_markup)
 
 @restricted
 def admin_get_distinct(update, context):
     distinct_users_number = sql_get_distinct_ids()
-    context.bot.send_message(chat_id = update.message.chat_id, text = distinct_users_number)
+    context.bot.send_message(chat_id = update.message.chat_id, text = distinct_users_number, reply_markup = reply_markup)
 
 @restricted
 def admin_help(update, context):
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.admin_help_command_response)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.admin_help_command_response, reply_markup = reply_markup)
 
 def alarm(context):
     job = context.job
     user_id = job.context['user_id']
     user_tasks = get_text(user_id)
     whole_text = bot_messages.checking_todo_list_words + user_tasks + bot_messages.checked_todo_list_words
-    context.bot.send_message(job.context['chat_id'], text = whole_text)
+    context.bot.send_message(job.context['chat_id'], text = whole_text, reply_markup = reply_markup)
 
 def clear(update, context):
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_markup)
     return READ_CLEAR_CONFIRMATION
 
 def read_clear_confirmation(update, context):
@@ -177,17 +177,17 @@ def read_clear_confirmation(update, context):
         if user_tasks > 0:
             sql_clear(user_id)
             print("/clear: User with id: " + str(user_id) + " cleared all his tasks")
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_successfully_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_successfully_command_response, reply_markup = reply_markup)
         else:
             print("/clear: User with id: " + str(user_id) + " could not clear his tasks")
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.tasks_empty_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
     elif text == 'Нет':
-        context.bot.send_message(chat_id = update.message.chat_id, text = "Окей 😉")
+        context.bot.send_message(chat_id = update.message.chat_id, text = "Окей 😉", reply_markup = reply_markup)
     return ConversationHandler.END
 
 def add_task(update, context):
     if not context.args:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.add_task_write_task)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.add_task_write_task, reply_markup = reply_markup)
         return READ_NEW_TASK
     new_task = context.args[0]
     ith = 0
@@ -198,19 +198,19 @@ def add_task(update, context):
     user_id = update.message.from_user.id
     add_to_database(user_id, new_task)
     whole_text = bot_messages.updated_tasks_command_response + get_text(user_id)
-    context.bot.send_message(chat_id = update.message.chat_id, text = whole_text)
+    context.bot.send_message(chat_id = update.message.chat_id, text = whole_text, reply_markup = reply_markup)
 
 def read_new_task(update, context):
     new_task = update.message.text
     user_id = update.message.from_user.id
     add_to_database(user_id, new_task)
     whole_text = bot_messages.updated_tasks_command_response + get_text(user_id)
-    context.bot.send_message(chat_id = update.message.chat_id, text = whole_text)
+    context.bot.send_message(chat_id = update.message.chat_id, text = whole_text, reply_markup = reply_markup)
     return ConversationHandler.END
 
 def delete_task(update, context):
     if not context.args:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_write_task)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_write_task, reply_markup = reply_markup)
         return READ_TASK_NUM
     task = context.args[0]
     try:
@@ -218,12 +218,12 @@ def delete_task(update, context):
         user_id = update.message.from_user.id
         number_of_tasks = sql_number_of_tasks(user_id)
         if task_number < 1 or task_number > number_of_tasks:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_wrong_number_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_wrong_number_command_response, reply_markup = reply_markup)
             return
         sql_delete(user_id, task_number)
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_successfully_command_response)
-    except ValueError:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_error_command_response)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_successfully_command_response, reply_markup = reply_markup)
+    except (IndexError, ValueError):
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_error_command_response, reply_markup = reply_markup)
 
 def read_task_num(update, context):
     task = update.message.text
@@ -232,25 +232,25 @@ def read_task_num(update, context):
         user_id = update.message.from_user.id
         number_of_tasks = sql_number_of_tasks(user_id)
         if task_number < 1 or task_number > number_of_tasks:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_wrong_number_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_wrong_number_command_response, reply_markup = reply_markup)
             return ConversationHandler.END
         sql_delete(user_id, task_number)
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_successfully_command_response)
-    except ValueError:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_error_command_response)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_successfully_command_response, reply_markup = reply_markup)
+    except (IndexError, ValueError):
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_error_command_response, reply_markup = reply_markup)
     return ConversationHandler.END
 def set_timer(update, context):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
     if not context.args:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_write_time);
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_write_time, reply_markup = reply_markup)
         return READ_MINUTES
     text = context.args[0]
     try:
         updated = 0
         due = int(text)
         if due < 1 or due > 1440:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.error_time_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.error_time_command_response, reply_markup = reply_markup)
             return
         if 'job' in context.chat_data:
             updated = 1;
@@ -261,11 +261,11 @@ def set_timer(update, context):
         new_job = context.job_queue.run_repeating(alarm, due * 60, context = {"chat_id": chat_id, "user_id": user_id})
         context.chat_data['job'] = new_job
         if updated is 0:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_successfully_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_successfully_command_response, reply_markup = reply_markup)
         else:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.updated_timer_successfully_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.updated_timer_successfully_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_error_command_response)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_error_command_response, reply_markup = reply_markup)
 
 def read_minutes(update, context):
     chat_id = update.message.chat_id
@@ -275,7 +275,7 @@ def read_minutes(update, context):
         updated = 0
         due = int(text)
         if due < 1 or due > 1440:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.error_time_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.error_time_command_response, reply_markup = reply_markup)
             return ConversationHandler.END
         if 'job' in context.chat_data:
             updated = 1;
@@ -285,16 +285,16 @@ def read_minutes(update, context):
         new_job = context.job_queue.run_repeating(alarm, due * 60, context = {"chat_id": chat_id, "user_id": user_id})
         context.chat_data['job'] = new_job
         if updated is 0:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_successfully_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_successfully_command_response, reply_markup = reply_markup)
         else:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.updated_timer_successfully_command_response)
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.updated_timer_successfully_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_error_command_response)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_error_command_response, reply_markup = reply_markup)
     return ConversationHandler.END
 
 def feedback(update, context):
     if not context.args:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.feedback_write_text)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.feedback_write_text,  reply_markup = reply_markup)
         return READ_FEEDBACK
     text = context.args[0]
     ith = 0
@@ -307,7 +307,7 @@ def feedback(update, context):
     text = "❗️Хей, пользоветель бота отправил новый фидбэк всем админам: ❗️\n\nFeedback:\n" + text + "\n\nUsername: @" + str(username) + "\n\nUser ID: " + str(user_id)
     for admin_id in LIST_OF_ADMINS:
         context.bot.send_message(chat_id = admin_id, text = text)
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.feedback_success_command_response)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.feedback_success_command_response, reply_markup = reply_markup)
 
 def read_feedback(update, context):
     text = update.message.text
@@ -316,7 +316,7 @@ def read_feedback(update, context):
     text =  "❗️Хей, пользоветель бота отправил новый фидбэк всем админам: ❗️\n\nFeedback:\n" + text + "\n\nUsername: @" + str(username) + "\n\nUser ID: " + str(user_id)
     for admin_id in LIST_OF_ADMINS:
         context.bot.send_message(chat_id = admin_id, text = text)
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.feedback_success_command_response)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.feedback_success_command_response, reply_markup = reply_markup)
     return ConversationHandler.END
 
 def show_tasks(update, context):
@@ -327,28 +327,27 @@ def show_tasks(update, context):
         whole_text = bot_messages.show_tasks_command_response + get_text(user_id)
     else:
         whole_text = bot_messages.tasks_empty_command_response
-    context.bot.send_message(chat_id = update.message.chat_id, text = whole_text)
+    context.bot.send_message(chat_id = update.message.chat_id, text = whole_text, reply_markup = reply_markup)
 
 def stop(update, context):
     """ Stop the timer """
     if 'job' not in context.chat_data:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.did_not_set_command_response)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.did_not_set_command_response, reply_markup = reply_markup)
         return
     job = context.chat_data['job']
     job.schedule_removal()
     del context.chat_data['job']
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.stopped_successfully_command_response)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.stopped_successfully_command_response, reply_markup = reply_markup)
 
 
 def start(update, context):
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.start_command_response, reply_markup = reply_markup)
 
 def help(update, context):
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.help_command_response)
-
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.help_command_response, reply_markup = reply_markup)
 
 def unknown(update, context):
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.unknown_command_response)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.unknown_command_response, reply_markup = reply_markup)
 
 def main():
     dp = updater.dispatcher
