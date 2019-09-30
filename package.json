@@ -2,7 +2,7 @@
   "name": "minderbbot",
   "version": "1.0.0",
   "description": "",
-  "main": "main.py",
+  "main": "index.js",
   "scripts": {
     "start": "node main.py "
   },
