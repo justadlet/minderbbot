@@ -17,6 +17,13 @@ READ_MINUTES = 2
 READ_FEEDBACK = 3
 READ_CLEAR_CONFIRMATION = 4
 
+connection = sqlite3.connect('userTasks.db', check_same_thread = False)
+
+logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                     level = logging.INFO)
+
+updater = Updater(token = '978907297:AAFntZ3OU7sikGoCceZTdlYYBe94toTLL0U', use_context = True)
+
 """Commands with database"""
 
 custom_keyboard = [['/add', '/delete'],
@@ -343,20 +350,7 @@ def help(update, context):
 def unknown(update, context):
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.unknown_command_response, reply_markup = reply_markup)
 
-if __name__ == '__main__':
-    TOKEN = 'TOKEN'
-    NAME = "minderbbot"
-
-    PORT = os.environ.get('PORT')
-
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                        level=logging.INFO)
-
-
-    connection = sqlite3.connect('userTasks.db', check_same_thread = False)
-    logger = logging.getLogger(__name__)
-
-    updater = Updater(TOKEN)
+def main():
     dp = updater.dispatcher
     feedback_handler = CommandHandler('feedback', feedback, pass_args = True, pass_chat_data = True)
     clear_handler = CommandHandler('clear', clear)
@@ -439,9 +433,9 @@ if __name__ == '__main__':
     dp.add_handler(admin_send_to_handler)
     dp.add_handler(unknown_handler)
 
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=TOKEN)
+    updater.start_polling()
 
-    updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
     updater.idle()
+
+if __name__ == '__main__':
+    main()
