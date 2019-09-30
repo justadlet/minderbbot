@@ -21,7 +21,7 @@ connection = sqlite3.connect('userTasks.db', check_same_thread = False)
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
 
-updater = Updater(token = 'TOKEN', use_context = True)
+updater = Updater(token = "TOKEN", use_context = True)
 
 """Commands with database"""
 
