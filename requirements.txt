@@ -3,3 +3,5 @@ emoji
 sqlalchemy
 requests
 certifi==2019.3.9
+pyTelegramBotAPI
+urllib3
