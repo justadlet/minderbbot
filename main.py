@@ -11,8 +11,13 @@ from functools import wraps
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
-
 updater = Updater(token = '968884156:AAFyhu8JqNvl__rB_G7DW9cSk9bSY7erl6c', use_context = True)
+custom_keyboard = [['/add', '/delete'],
+                   ['/set', '/stop'],
+                   ['/clear', '/showtasks'],
+                   ['/feedback', '/help'],
+                   ['/admin_help']]
+reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = True)
 
 def start(update, context):
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.start_command_response, reply_markup = reply_markup)
