@@ -1,1 +1,5 @@
 python-telegram-bot
+emoji
+sqlalchemy
+requests
+certifi==2019.3.9
