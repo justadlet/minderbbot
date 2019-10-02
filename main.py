@@ -10,20 +10,20 @@ from config import bot_messages
 from functools import wraps
 
 
-LIST_OF_ADMINS = [ADMIN_0]
+LIST_OF_ADMINS = [251961384]
 
 READ_NEW_TASK = 0
 READ_TASK_NUM = 1
 READ_MINUTES = 2
 READ_FEEDBACK = 3
-READ_CLEAR_CONFIRMATION = 4 
+READ_CLEAR_CONFIRMATION = 4
 
 connection = sqlite3.connect('userTasks.db', check_same_thread = False)
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
 
-updater = Updater(token = 'BOT_TOKEN', use_context = True)
+updater = Updater(token = '978907297:AAFntZ3OU7sikGoCceZTdlYYBe94toTLL0U', use_context = True)
 
 """Commands with database"""
 
