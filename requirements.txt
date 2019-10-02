@@ -1,12 +1,5 @@
 python-telegram-bot
+pyTelegramBotAPI
 emoji
 sqlalchemy
 requests
-certifi==2019.3.9
-pyTelegramBotAPI
-urllib3 
-chardet==3.0.4
-idna==2.8
-numpy==1.16.2
-six==1.4.1
-schedule==0.6.0

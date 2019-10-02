@@ -13,7 +13,7 @@ logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message
                      level = logging.INFO)
 updater = Updater(token = '968884156:AAFyhu8JqNvl__rB_G7DW9cSk9bSY7erl6c', use_context = True)
 custom_keyboard = [['/add', '/delete'],
-                   ['/set', '/sto'],
+                   ['/set', '/stop'],
                    ['/clear', '/showtasks'],
                    ['/feedback', '/help'],
                    ['/admin_help']]
