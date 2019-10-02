@@ -10,7 +10,7 @@ from config import bot_messages
 from functools import wraps
 
 
-LIST_OF_ADMINS = [25196138]
+LIST_OF_ADMINS = [251961384]
 
 READ_NEW_TASK = 0
 READ_TASK_NUM = 1
