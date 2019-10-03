@@ -21,7 +21,7 @@ DB_User = os.environ['DB_User']
 DB_Port = os.environ['DB_Port']
 DB_Password = os.environ['DB_Password']
 
-connection = psycopg2.connect(user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port, database = DB_Database)
+connection = psycopg2.connect(DATABASE_URL)
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
