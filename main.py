@@ -48,26 +48,26 @@ sql_table(connection)
 
 def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
-    cur.execute('INSERT INTO tasks(user_id, task) VALUES(%s, %s)', (user_id, new_task, ))
+    cur.execute("INSERT INTO tasks(user_id, task) VALUES(%s, %s)", (user_id, new_task, ))
     connection.commit()
     cur.close()
 
 def sql_clear(user_id):
     cur = connection.cursor()
-    cur.execute('DELETE FROM tasks WHERE user_id = %s', (user_id, ))
+    cur.execute("DELETE FROM tasks WHERE user_id = %s", (user_id, ))
     connection.commit()
     cur.close()
 
 def sql_delete(user_id, task_number):
     cur = connection.cursor()
     task_number = task_number - 1
-    cur.execute('DELETE FROM tasks WHERE id in (SELECT id FROM tasks WHERE user_id = %s LIMIT 1 OFFSET ?)', (user_id, task_number))
+    cur.execute("DELETE FROM tasks WHERE id in (SELECT id FROM tasks WHERE user_id = %s LIMIT 1 OFFSET ?)", (user_id, task_number))
     connection.commit()
     cur.close()
 
 def sql_number_of_tasks(user_id):
     cur = connection.cursor()
-    cur.execute('SELECT COUNT(*) FROM tasks WHERE user_id = %s', (user_id, ))
+    cur.execute("SELECT COUNT(*) FROM tasks WHERE user_id = %s", (user_id, ))
     number_of_tasks = cur.fetchall()
     result = number_of_tasks[0][0]
     connection.commit()
@@ -76,7 +76,7 @@ def sql_number_of_tasks(user_id):
 
 def sql_get_tasks(user_id):
     cur = connection.cursor()
-    cur.execute('SELECT task FROM tasks WHERE user_id = %s', (user_id, ))
+    cur.execute("SELECT task FROM tasks WHERE user_id = %s", (user_id, ))
     tasks = cur.fetchall()
     print("/showtasks: User #" + str(user_id) + " wanted to show his tasks: ")
     connection.commit()
@@ -85,7 +85,7 @@ def sql_get_tasks(user_id):
 
 def sql_get_distinct_ids():
     cur = connection.cursor()
-    cur.execute('SELECT COUNT (DISTINCT user_id) FROM tasks')
+    cur.execute("SELECT COUNT (DISTINCT user_id) FROM tasks")
     distinct_ids = cur.fetchall()
     connection.commit()
     cur.close()
@@ -93,7 +93,7 @@ def sql_get_distinct_ids():
 
 def sql_get_ids():
     cur = connection.cursor()
-    cur.execute('SELECT DISTINCT user_id FROM tasks')
+    cur.execute("SELECT DISTINCT user_id FROM tasks")
     ids = cur.fetchall()
     user_ids = []
     for i in ids:
