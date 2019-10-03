@@ -15,11 +15,11 @@ READ_MINUTES = 2
 READ_FEEDBACK = 3
 READ_CLEAR_CONFIRMATION = 4
 
-connection = sqlite3.connect('userTasks.db', check_same_thread = True)
+connection = sqlite3.connect('userTasks.db', check_same_thread = False)
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
-
+                     
 updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
 
 LIST_OF_ADMINS = [251961384]
