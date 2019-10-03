@@ -21,7 +21,7 @@ DB_User = os.environ['DB_User']
 DB_Port = os.environ['DB_Port']
 DB_Password = os.environ['DB_Password']
 
-connection = psycopg2.connect(user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port, database = DB_Database)
+connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
 
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
@@ -40,7 +40,7 @@ reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = T
 
 def sql_table(connection):
     cur = connection.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS tasks(id integer PRIMARY KEY, user_id integer, task text)")
+    cur.execute("""CREATE TABLE IF NOT EXISTS tasks(id integer PRIMARY KEY, user_id integer, task text)""")
     cur.close()
     connection.commit()
 
@@ -48,26 +48,26 @@ sql_table(connection)
 
 def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
-    cur.execute('INSERT INTO tasks(user_id, task) VALUES(%s, %s)', (user_id, new_task, ))
+    cur.execute('''INSERT INTO tasks(user_id, task) VALUES(%s, %s)''', (user_id, new_task, ))
     cur.close()
     connection.commit()
 
 def sql_clear(user_id):
     cur = connection.cursor()
-    cur.execute('DELETE FROM tasks WHERE user_id = %s', (user_id, ))
+    cur.execute('''DELETE FROM tasks WHERE user_id = %s''', (user_id, ))
     cur.close()
     connection.commit()
 
 def sql_delete(user_id, task_number):
     cur = connection.cursor()
     task_number = task_number - 1
-    cur.execute('DELETE FROM tasks WHERE id in (SELECT id FROM tasks WHERE user_id = %s LIMIT 1 OFFSET ?)', (user_id, task_number))
+    cur.execute('''DELETE FROM tasks WHERE id in (SELECT id FROM tasks WHERE user_id = %s LIMIT 1 OFFSET ?)''', (user_id, task_number))
     cur.close()
     connection.commit()
 
 def sql_number_of_tasks(user_id):
     cur = connection.cursor()
-    cur.execute('SELECT COUNT(*) FROM tasks WHERE user_id = %s', (user_id, ))
+    cur.execute('''SELECT COUNT(*) FROM tasks WHERE user_id = %s''', (user_id, ))
     number_of_tasks = cur.fetchall()
     result = number_of_tasks[0][0]
     cur.close()
@@ -76,7 +76,7 @@ def sql_number_of_tasks(user_id):
 
 def sql_get_tasks(user_id):
     cur = connection.cursor()
-    cur.execute('SELECT task FROM tasks WHERE user_id = %s', (user_id, ))
+    cur.execute('''SELECT task FROM tasks WHERE user_id = %s''', (user_id, ))
     tasks = cur.fetchall()
     print("/showtasks: User #" + str(user_id) + " wanted to show his tasks: ")
     cur.close()
@@ -85,7 +85,7 @@ def sql_get_tasks(user_id):
 
 def sql_get_distinct_ids():
     cur = connection.cursor()
-    cur.execute('SELECT COUNT (DISTINCT user_id) FROM tasks')
+    cur.execute('''SELECT COUNT (DISTINCT user_id) FROM tasks''')
     distinct_ids = cur.fetchall()
     cur.close()
     connection.commit()
@@ -93,7 +93,7 @@ def sql_get_distinct_ids():
 
 def sql_get_ids():
     cur = connection.cursor()
-    cur.execute('SELECT DISTINCT user_id FROM tasks')
+    cur.execute('''SELECT DISTINCT user_id FROM tasks''')
     ids = cur.fetchall()
     user_ids = []
     for i in ids:
