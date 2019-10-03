@@ -3,3 +3,4 @@ pyTelegramBotAPI
 emoji
 sqlalchemy
 requests
+psycopg2
