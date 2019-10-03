@@ -47,9 +47,9 @@ def sql_table(connection):
 
 sql_table(connection)
 
-def sql_insert(connection, entities):
+def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
-    cur.execute('INSERT INTO tasks(user_id, task) VALUES(%s, %s)', entities)
+    cur.execute('INSERT INTO tasks(user_id, task) VALUES(%s, %s)', (user_id, new_task, ))
     cur.close()
     connection.commit()
 
@@ -115,8 +115,7 @@ def restricted(func):
 
 def add_to_database(user_id, new_task):
     print("/add: User with id: " + str(user_id) + " added a new task: ")
-    entities = (user_id, new_task)
-    sql_insert(connection, entities)
+    sql_insert(connection, user_id, new_task)
 
 def get_text(user_id):
     ith = 0
