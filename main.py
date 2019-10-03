@@ -41,37 +41,37 @@ reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = T
 def sql_table(connection):
     cur = connection.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS tasks(id integer PRIMARY KEY, user_id integer, task text)")
-    cur.close()
     connection.commit()
+    cur.close()
 
 sql_table(connection)
 
 def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
     cur.execute('INSERT INTO tasks(user_id, task) VALUES(%s, %s)', (user_id, new_task, ))
-    cur.close()
     connection.commit()
+    cur.close()
 
 def sql_clear(user_id):
     cur = connection.cursor()
     cur.execute('DELETE FROM tasks WHERE user_id = %s', (user_id, ))
-    cur.close()
     connection.commit()
+    cur.close()
 
 def sql_delete(user_id, task_number):
     cur = connection.cursor()
     task_number = task_number - 1
     cur.execute('DELETE FROM tasks WHERE id in (SELECT id FROM tasks WHERE user_id = %s LIMIT 1 OFFSET ?)', (user_id, task_number))
-    cur.close()
     connection.commit()
+    cur.close()
 
 def sql_number_of_tasks(user_id):
     cur = connection.cursor()
     cur.execute('SELECT COUNT(*) FROM tasks WHERE user_id = %s', (user_id, ))
     number_of_tasks = cur.fetchall()
     result = number_of_tasks[0][0]
-    cur.close()
     connection.commit()
+    cur.close()
     return result
 
 def sql_get_tasks(user_id):
@@ -79,16 +79,16 @@ def sql_get_tasks(user_id):
     cur.execute('SELECT task FROM tasks WHERE user_id = %s', (user_id, ))
     tasks = cur.fetchall()
     print("/showtasks: User #" + str(user_id) + " wanted to show his tasks: ")
-    cur.close()
     connection.commit()
+    cur.close()
     return tasks
 
 def sql_get_distinct_ids():
     cur = connection.cursor()
     cur.execute('SELECT COUNT (DISTINCT user_id) FROM tasks')
     distinct_ids = cur.fetchall()
-    cur.close()
     connection.commit()
+    cur.close()
     return distinct_ids[0][0]
 
 def sql_get_ids():
@@ -98,8 +98,8 @@ def sql_get_ids():
     user_ids = []
     for i in ids:
         user_ids.append(i[0])
-    cur.close()
     connection.commit()
+    cur.close()
     return user_ids
 
 def restricted(func):
