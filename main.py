@@ -9,9 +9,6 @@ from telegram import InlineQueryResultArticle, InputTextMessageContent, ReplyKey
 from config import bot_messages
 from functools import wraps
 
-
-LIST_OF_ADMINS = [os.environ['ADMIN_0']]
-
 READ_NEW_TASK = 0
 READ_TASK_NUM = 1
 READ_MINUTES = 2
@@ -24,6 +21,10 @@ logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message
                      level = logging.INFO)
 
 updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
+
+ADMIN_0 = os.environ['ADMIN_0']
+
+LIST_OF_ADMINS = [ADMIN_0]
 
 """Commands with database"""
 
