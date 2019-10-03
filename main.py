@@ -22,7 +22,7 @@ logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message
 
 updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
 
-LIST_OF_ADMINS = [25196138]
+LIST_OF_ADMINS = [251961384]
 
 """Commands with database"""
 
