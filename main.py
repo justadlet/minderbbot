@@ -44,7 +44,7 @@ reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = T
 
 def sql_table(connection):
     cur = connection.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS tasks(id SERIAL PRIMARY KEY, user_id integer, task text)")
+    cur.execute("CREATE TABLE IF NOT EXISTS tasks(id SERIAL NOT NULL, user_id integer, task text)")
     connection.commit()
     cur.close()
 
