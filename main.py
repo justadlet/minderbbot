@@ -176,10 +176,12 @@ def alarm(context):
     context.bot.send_message(job.context['chat_id'], text = whole_text, reply_markup = reply_markup)
 
 def clear(update, context):
-    keyboard = [InlineKeyboardButton("Да", callback_data = '1'),
-                InlineKeyboardButton("Нет", callback_data = '2')]
+    keyboard = [
+        InlineKeyboardButton("Да", callback_data = '1'),
+        InlineKeyboardButton("Нет", callback_data = '2')
+    ]
     reply_keyboard = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text('Hey, choose:', reply_markup = reply_keyboard)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
     return READ_CLEAR_CONFIRMATION
 
 def read_clear_confirmation(update, context):
