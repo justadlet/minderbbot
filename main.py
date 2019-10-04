@@ -196,7 +196,7 @@ def clear(update, context):
     return bot_states.CHECK
 
 def check_query(update, context, user_data):
-    print(user_data)
+    print(context.user_data)
     return ConversationHandler.END
 
 def add_task(update, context):
@@ -412,7 +412,7 @@ def main():
         entry_points = [CommandHandler('clear', clear)],
 
         states = {
-            bot_states.CHECK: [CallbackQueryHandler(check_query, pass_user_data = True)]
+            bot_states.CHECK: [CallbackQueryHandler(check_query)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
