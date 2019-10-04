@@ -196,7 +196,7 @@ def clear(update, context):
     return bot_states.CHECK
 
 def check_query(update, context):
-    print(context.user_data)
+    print(context.message.from_user)
     return ConversationHandler.END
 
 def add_task(update, context):
