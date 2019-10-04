@@ -52,7 +52,7 @@ sql_table(connection)
 
 def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
-    cur.execute("INSERT INTO tasks(id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, user_id, task) VALUES(%s, %s)", (user_id, new_task, ))
+    cur.execute("INSERT INTO tasks(user_id, task) VALUES(%s, %s)", (user_id, new_task, ))
     connection.commit()
     cur.close()
 
