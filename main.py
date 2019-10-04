@@ -193,6 +193,7 @@ def clear(update, context):
     ]
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
+    print("I am in clear func")
     return bot_states.READ_CLEAR_CONFIRMATION
 
 def read_clear_confirmation(update, context):
