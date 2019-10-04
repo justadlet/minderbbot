@@ -175,14 +175,25 @@ def alarm(context):
     whole_text = bot_messages.checking_todo_list_words + user_tasks + bot_messages.checked_todo_list_words
     context.bot.send_message(job.context['chat_id'], text = whole_text, reply_markup = reply_markup)
 
+def build_menu(buttons,
+               n_cols,
+               header_buttons=None,
+               footer_buttons=None):
+    menu = [buttons[i:i + n_cols] for i in range(0, len(buttons), n_cols)]
+    if header_buttons:
+        menu.insert(0, [header_buttons])
+    if footer_buttons:
+        menu.append([footer_buttons])
+    return menu
+
 def clear(update, context):
     keyboard = [
         InlineKeyboardButton("Да", callback_data = '1'),
         InlineKeyboardButton("Нет", callback_data = '2')
     ]
-    reply_keyboard = InlineKeyboardMarkup(keyboard)
+    reply_keyboard = InlineKeyboardMarkup(util.build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
-    return bot_states.EAD_CLEAR_CONFIRMATION
+    return bot_states.READ_CLEAR_CONFIRMATION
 
 def read_clear_confirmation(update, context):
     query = update.callback_query
