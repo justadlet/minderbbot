@@ -191,17 +191,25 @@ def clear(update, context):
         InlineKeyboardButton("Да", callback_data = '1'),
         InlineKeyboardButton("Нет", callback_data = '2')
     ]
-    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
+    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 2))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
     print("I am in clear func")
 
 def button(update, context):
     query = update.callback_query
-    print("Im in button func")
-    query.edit_message_text(text="Selected option: {}".format(query.data))
-
-
-
+    user_id = update.message.from_user.id
+    user_tasks = sql_number_of_tasks(user_id)
+    if query.data == '1':
+        if user_tasks > 0:
+            sql_clear(user_id)
+            print("/clear: User with id: " + str(user_id) + " cleared all his tasks")
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_successfully_command_response, reply_markup = reply_markup)
+        else:
+            print("/clear: User with id: " + str(user_id) + " could not clear his tasks")
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
+    else:
+        context.bot.send_message(chat_id = update.message.chat_id, text = "Окей 😉", reply_markup = reply_markup)
+        
 def add_task(update, context):
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.add_task_write_task, reply_markup = reply_markup)
