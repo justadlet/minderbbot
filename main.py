@@ -4,7 +4,7 @@ import logging
 import time
 import os
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler, ConversationHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler, ConversationHandler, CallbackQueryHandler
 from telegram import InlineQueryResultArticle, InputTextMessageContent, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from config import bot_messages, bot_states
 from functools import wraps
@@ -176,23 +176,17 @@ def alarm(context):
     context.bot.send_message(job.context['chat_id'], text = whole_text, reply_markup = reply_markup)
 
 def clear(update, context):
-    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_markup)
-    return bot_states.READ_CLEAR_CONFIRMATION
+    keyboard = [InlineKeyboardButton("Да", callback_data = '1'),
+                InlineKeyboardButton("Нет", callback_data = '2')]
+    reply_keyboard = InlineKeyboardMarkup(keyboard)
+    context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
+    return READ_CLEAR_CONFIRMATION
 
 def read_clear_confirmation(update, context):
-    text = update.message.text
-    if text.lower() == 'да':
-        user_id = update.message.from_user.id
-        user_tasks = sql_number_of_tasks(user_id)
-        if user_tasks > 0:
-            sql_clear(user_id)
-            print("/clear: User with id: " + str(user_id) + " cleared all his tasks")
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_successfully_command_response, reply_markup = reply_markup)
-        else:
-            print("/clear: User with id: " + str(user_id) + " could not clear his tasks")
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
-    elif text == 'нет' or text == 'Нет' or text == 'НЕТ':
-        context.bot.send_message(chat_id = update.message.chat_id, text = "Окей 😉", reply_markup = reply_markup)
+    query = update.callback_query
+    if (query.data == '1')
+        context.bot.send_message(chat_id = update.message.chat_id, text = "Da", reply_markup = reply_markup)
+
     return ConversationHandler.END
 
 def add_task(update, context):
