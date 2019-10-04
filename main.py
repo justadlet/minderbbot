@@ -191,7 +191,7 @@ def clear(update, context):
         InlineKeyboardButton("Да", callback_data = '1'),
         InlineKeyboardButton("Нет", callback_data = '2')
     ]
-    reply_keyboard = InlineKeyboardMarkup(util.build_menu(keyboard, n_cols = 1))
+    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
     return bot_states.READ_CLEAR_CONFIRMATION
 
