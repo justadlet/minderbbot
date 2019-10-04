@@ -194,15 +194,10 @@ def clear(update, context):
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
     print("I am in clear func")
-    return bot_states.READ_CLEAR_CONFIRMATION
-
-def read_clear_confirmation(update, context):
     query = update.callback_query
     print("Im in read_clear_confirmation func")
-    if query.data == '1':
-        context.bot.send_message(chat_id = update.message.chat_id, text = "Вы нажали на Да", reply_markup = reply_markup)
+    print(query)
 
-    return ConversationHandler.END
 
 def add_task(update, context):
     if not context.args:
@@ -413,15 +408,6 @@ def main():
 
         fallbacks = [CommandHandler('cancel', cancel)]
     )
-    clear_conv_handler = ConversationHandler(
-        entry_points = [CommandHandler('clear', clear)],
-
-        states = {
-            bot_states.READ_CLEAR_CONFIRMATION: [CommandHandler(read_clear_confirmation)]
-        },
-
-        fallbacks = [CommandHandler('cancel', cancel)]
-    )
     add_handler = CommandHandler('add', add_task)
     set_timer_handler = CommandHandler('set', set_timer)
     stop_handler = CommandHandler('stop', stop, pass_chat_data = True)
@@ -434,7 +420,6 @@ def main():
 
     unknown_handler = MessageHandler(Filters.command, unknown)
 
-    dp.add_handler(clear_conv_handler)
     dp.add_handler(feedback_conv_handler)
     dp.add_handler(del_conv_handler)
     dp.add_handler(add_conv_handler)
