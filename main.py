@@ -184,7 +184,7 @@ def clear(update, context):
 
 def read_clear_confirmation(update, context):
     query = update.callback_query
-    if (query.data == '1')
+    if query.data == '1':
         context.bot.send_message(chat_id = update.message.chat_id, text = "Da", reply_markup = reply_markup)
 
     return ConversationHandler.END
