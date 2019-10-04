@@ -193,6 +193,7 @@ def clear(update, context):
     ]
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
+    return bot_states.CHECK
 
 def check_query(update, context):
     query = update.callback_query
