@@ -427,7 +427,7 @@ def main():
         entry_points = [CommandHandler('clear', clear)],
 
         states = {
-            bot_states.CHECK: [CallbackQueryHandler(check_query)]
+            bot_states.CHECK: [CallbackQueryHandler(check_query, pattern='^1$')]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
@@ -444,6 +444,7 @@ def main():
 
     unknown_handler = MessageHandler(Filters.command, unknown)
 
+    dp.add_handler(clear_conv_hnadler)
     dp.add_handler(feedback_conv_handler)
     dp.add_handler(del_conv_handler)
     dp.add_handler(add_conv_handler)
@@ -456,7 +457,6 @@ def main():
     dp.add_handler(set_timer_handler)
     dp.add_handler(stop_handler)
     dp.add_handler(start_handler)
-    dp.add_handler(clear_conv_hnadler)
     dp.add_handler(help_handler)
     dp.add_handler(admin_help_handler)
     dp.add_handler(admin_send_to_all_handler)
