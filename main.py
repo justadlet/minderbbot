@@ -453,7 +453,7 @@ def main():
     dp.add_handler(set_timer_handler)
     dp.add_handler(stop_handler)
     dp.add_handler(start_handler)
-    dp.add_handler(button_handler)
+    dp.add_handler(clear_conv_hnadler)
     dp.add_handler(help_handler)
     dp.add_handler(admin_help_handler)
     dp.add_handler(admin_send_to_all_handler)
