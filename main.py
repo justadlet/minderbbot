@@ -203,12 +203,12 @@ def check_query(update, context):
         if user_tasks > 0:
             sql_clear(user_id)
             print("/clear: User with id: " + str(user_id) + " cleared all his tasks")
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_successfully_command_response, reply_markup = reply_markup)
+            context.bot.send_message(chat_id = user_id, text = bot_messages.clear_successfully_command_response, reply_markup = reply_markup)
         else:
             print("/clear: User with id: " + str(user_id) + " could not clear his tasks")
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
+            context.bot.send_message(chat_id = user_id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
     else:
-        context.bot.send_message(chat_id = update.message.chat_id, text = "Окей 😉", reply_markup = reply_markup)
+        context.bot.send_message(chat_id = user_id, text = "Окей 😉", reply_markup = reply_markup)
 
     return ConversationHandler.END
 
