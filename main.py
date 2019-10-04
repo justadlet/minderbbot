@@ -6,14 +6,8 @@ import os
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler, ConversationHandler
 from telegram import InlineQueryResultArticle, InputTextMessageContent, ReplyKeyboardMarkup, ReplyKeyboardRemove
-from config import bot_messages
+from config import bot_messages, bot_states
 from functools import wraps
-
-READ_NEW_TASK = 0
-READ_TASK_NUM = 1
-READ_MINUTES = 2
-READ_FEEDBACK = 3
-READ_CLEAR_CONFIRMATION = 4
 
 DB_Host = os.environ['DB_Host']
 DB_Database = os.environ['DB_Database']
@@ -183,11 +177,11 @@ def alarm(context):
 
 def clear(update, context):
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_markup)
-    return READ_CLEAR_CONFIRMATION
+    return bot_states.READ_CLEAR_CONFIRMATION
 
 def read_clear_confirmation(update, context):
     text = update.message.text
-    if text == 'да' or text == 'Да' or text == 'ДА':
+    if text.lower() == 'да':
         user_id = update.message.from_user.id
         user_tasks = sql_number_of_tasks(user_id)
         if user_tasks > 0:
@@ -204,7 +198,7 @@ def read_clear_confirmation(update, context):
 def add_task(update, context):
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.add_task_write_task, reply_markup = reply_markup)
-        return READ_NEW_TASK
+        return bot_states.READ_NEW_TASK
     new_task = context.args[0]
     ith = 0
     for word in context.args:
@@ -230,7 +224,7 @@ def read_new_task(update, context):
 def delete_task(update, context):
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_write_task, reply_markup = reply_markup)
-        return READ_TASK_NUM
+        return bot_states.READ_TASK_NUM
     task = context.args[0]
     try:
         task_number = int(task)
@@ -263,7 +257,7 @@ def set_timer(update, context):
     user_id = update.message.from_user.id
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.set_timer_write_time, reply_markup = reply_markup)
-        return READ_MINUTES
+        return bot_states.READ_MINUTES
     text = context.args[0]
     try:
         updated = 0
@@ -314,7 +308,7 @@ def read_minutes(update, context):
 def feedback(update, context):
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.feedback_write_text,  reply_markup = reply_markup)
-        return READ_FEEDBACK
+        return bot_states.READ_FEEDBACK
     text = context.args[0]
     ith = 0
     for word in context.args:
@@ -378,7 +372,7 @@ def main():
         entry_points = [CommandHandler('add', add_task)],
 
         states = {
-            READ_NEW_TASK: [MessageHandler(Filters.text, read_new_task)]
+            bot_states.READ_NEW_TASK: [MessageHandler(Filters.text, read_new_task)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
@@ -387,7 +381,7 @@ def main():
         entry_points = [CommandHandler('delete', delete_task)],
 
         states = {
-            READ_TASK_NUM: [MessageHandler(Filters.text, read_task_num)]
+            bot_states.READ_TASK_NUM: [MessageHandler(Filters.text, read_task_num)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
@@ -396,7 +390,7 @@ def main():
         entry_points = [CommandHandler('set', set_timer)],
 
         states = {
-            READ_MINUTES: [MessageHandler(Filters.text, read_minutes)]
+            bot_states.READ_MINUTES: [MessageHandler(Filters.text, read_minutes)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
@@ -405,7 +399,7 @@ def main():
         entry_points = [CommandHandler('feedback', feedback)],
 
         states = {
-            READ_FEEDBACK: [MessageHandler(Filters.text, read_feedback)]
+            bot_states.READ_FEEDBACK: [MessageHandler(Filters.text, read_feedback)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
@@ -414,7 +408,7 @@ def main():
         entry_points = [CommandHandler('clear', clear)],
 
         states = {
-            READ_CLEAR_CONFIRMATION: [MessageHandler(Filters.text, read_clear_confirmation)]
+            bot_states.READ_CLEAR_CONFIRMATION: [MessageHandler(Filters.text, read_clear_confirmation)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
