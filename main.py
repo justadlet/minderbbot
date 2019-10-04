@@ -197,7 +197,7 @@ def clear(update, context):
 
 def check_query(update, context):
     query = update.callback_query
-    print(user_data)
+    print(update.user_data)
     user_id = call.from_user.id
     print(query.data)
     user_tasks = sql_number_of_tasks(user_id)
