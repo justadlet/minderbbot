@@ -197,6 +197,7 @@ def clear(update, context):
 
 def read_clear_confirmation(update, context):
     query = update.callback_query
+    print("Im in read_clear_confirmation func")
     if query.data == '1':
         context.bot.send_message(chat_id = update.message.chat_id, text = "Вы нажали на Да", reply_markup = reply_markup)
 
