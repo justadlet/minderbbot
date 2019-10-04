@@ -214,18 +214,17 @@ def add_task(update, context):
     user_id = update.message.from_user.id
     add_to_database(user_id, new_task)
     whole_text = bot_messages.updated_tasks_command_response + get_text(user_id)
-    if sql_number_of_tasks(user_id) == 1:
-        whole_text = whole_text + "\n\n" + bot_messages.guide_set_timer
     context.bot.send_message(chat_id = update.message.chat_id, text = whole_text, reply_markup = reply_markup)
-
+    if sql_number_of_tasks(user_id) == 1:
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.guide_set_timer, reply_markup = reply_markup)
 def read_new_task(update, context):
     new_task = update.message.text
     user_id = update.message.from_user.id
     add_to_database(user_id, new_task)
     whole_text = bot_messages.updated_tasks_command_response + get_text(user_id)
-    if sql_number_of_tasks(user_id) == 1:
-        whole_text = whole_text + "\n\n" + bot_messages.guide_set_timer
     context.bot.send_message(chat_id = update.message.chat_id, text = whole_text, reply_markup = reply_markup)
+    if sql_number_of_tasks(user_id) == 1:
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.guide_set_timer, reply_markup = reply_markup)
     return ConversationHandler.END
 
 def delete_task(update, context):
