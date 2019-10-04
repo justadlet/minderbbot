@@ -417,7 +417,7 @@ def main():
         entry_points = [CommandHandler('clear', clear)],
 
         states = {
-            bot_states.READ_CLEAR_CONFIRMATION: [MessageHandler(Filters.text, read_clear_confirmation)]
+            bot_states.READ_CLEAR_CONFIRMATION: [CommandHandler(read_clear_confirmation)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
