@@ -197,7 +197,7 @@ def clear(update, context):
 
 def check_query(update, context):
     query = update.callback_query
-    print(call.from_user)
+    print(user_data)
     user_id = call.from_user.id
     print(query.data)
     user_tasks = sql_number_of_tasks(user_id)
@@ -426,7 +426,7 @@ def main():
         entry_points = [CommandHandler('clear', clear)],
 
         states = {
-            bot_states.CHECK: [CallbackQueryHandler(check_query)]
+            bot_states.CHECK: [CallbackQueryHandler(check_query, pass_user_data = True)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
