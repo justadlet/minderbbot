@@ -193,13 +193,10 @@ def clear(update, context):
     ]
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
-    print("I am in the end of clear()")
     return bot_states.CHECK
 
 def check_query(update, context):
     query = update.callback_query
-    user_id = update.message.from_user.id
-    print("I am in check_query()")
     print(query.data)
     user_tasks = sql_number_of_tasks(user_id)
     if query.data == '1':
