@@ -195,9 +195,9 @@ def clear(update, context):
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
     return bot_states.CHECK
 
-def check_query(update, context):
+def check_query(update, context, user_data):
     query = update.callback_query
-    print(update.user_data)
+    print(user_data)
     user_id = call.from_user.id
     print(query.data)
     user_tasks = sql_number_of_tasks(user_id)
