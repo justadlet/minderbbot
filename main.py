@@ -191,11 +191,10 @@ def clear(update, context):
         InlineKeyboardButton("Да", callback_data = '1'),
         InlineKeyboardButton("Нет", callback_data = '2')
     ]
-    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 2))
+    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
-    print("I am in clear func")
 
-def button(update, context):
+def check_query(update, context):
     query = update.callback_query
     user_id = update.message.from_user.id
     user_tasks = sql_number_of_tasks(user_id)
@@ -209,7 +208,8 @@ def button(update, context):
             context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
     else:
         context.bot.send_message(chat_id = update.message.chat_id, text = "Окей 😉", reply_markup = reply_markup)
-        
+    return ConversationHandler.END
+
 def add_task(update, context):
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.add_task_write_task, reply_markup = reply_markup)
@@ -417,6 +417,13 @@ def main():
             bot_states.READ_FEEDBACK: [MessageHandler(Filters.text, read_feedback)]
         },
 
+        fallbacks = [CommandHandler('cancel', cancel)]
+    )
+    clear_conv_hnadler = ConversationHandler(
+        entry_points = [CommandHandler('clear', clear)],
+        states = {
+            CHECK: [CallbackQueryHandler(check_query)]
+        }
         fallbacks = [CommandHandler('cancel', cancel)]
     )
     add_handler = CommandHandler('add', add_task)
