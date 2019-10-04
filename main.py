@@ -199,6 +199,7 @@ def check_query(update, context):
     query = update.callback_query
     user_id = update.effective_user.id
     user_tasks = sql_number_of_tasks(user_id)
+    print(query.data)
     if query.data == '1':
         if user_tasks > 0:
             sql_clear(user_id)
