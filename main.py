@@ -421,9 +421,9 @@ def main():
     )
     clear_conv_hnadler = ConversationHandler(
         entry_points = [CommandHandler('clear', clear)],
-        
+
         states = {
-            CHECK: [CallbackQueryHandler(check_query)]
+            bot_states.CHECK: [CallbackQueryHandler(check_query)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
