@@ -21,10 +21,14 @@ DB_User = os.environ['DB_User']
 DB_Port = os.environ['DB_Port']
 DB_Password = os.environ['DB_Password']
 
-connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
-
 logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                      level = logging.INFO)
+
+logger = logging.getLogger(__name__)
+
+connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
+
+logger.info("Successfully connected!")
 
 updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
 
@@ -40,7 +44,7 @@ reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = T
 
 def sql_table(connection):
     cur = connection.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS tasks(id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, user_id integer, task text)")
+    cur.execute("CREATE TABLE IF NOT EXISTS tasks(id integer PRIMARY KEY, user_id integer, task text)")
     connection.commit()
     cur.close()
 
@@ -48,7 +52,7 @@ sql_table(connection)
 
 def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
-    cur.execute("INSERT INTO tasks(user_id, task) VALUES(%s, %s)", (user_id, new_task, ))
+    cur.execute("INSERT INTO tasks(id integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, user_id, task) VALUES(%s, %s)", (user_id, new_task, ))
     connection.commit()
     cur.close()
 
