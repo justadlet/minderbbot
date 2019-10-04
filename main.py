@@ -65,7 +65,7 @@ def sql_clear(user_id):
 def sql_delete(user_id, task_number):
     cur = connection.cursor()
     task_number = task_number - 1
-    cur.execute("DELETE FROM tasks WHERE id in (SELECT id FROM tasks WHERE user_id = %s LIMIT 1 OFFSET ?)", (user_id, task_number))
+    cur.execute("DELETE FROM tasks WHERE id in (SELECT id FROM tasks WHERE user_id = %s LIMIT 1 OFFSET %s)", (user_id, task_number))
     connection.commit()
     cur.close()
 
