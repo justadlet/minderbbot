@@ -194,9 +194,12 @@ def clear(update, context):
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_command_confirmation, reply_markup = reply_keyboard)
     print("I am in clear func")
+
+def button(update, context):
     query = update.callback_query
-    print("Im in read_clear_confirmation func")
-    print(query)
+    print("Im in button func")
+    query.edit_message_text(text="Selected option: {}".format(query.data))
+
 
 
 def add_task(update, context):
@@ -412,6 +415,7 @@ def main():
     set_timer_handler = CommandHandler('set', set_timer)
     stop_handler = CommandHandler('stop', stop, pass_chat_data = True)
     start_handler = CommandHandler('start', start)
+    button_handler = CallbackQueryHandler(button)
     help_handler = CommandHandler('help', help)
     admin_help_handler = CommandHandler('admin_help', admin_help)
     admin_send_to_all_handler = CommandHandler('admin_send_to_all', admin_send_to_all, pass_args = True, pass_chat_data = True)
@@ -432,6 +436,7 @@ def main():
     dp.add_handler(set_timer_handler)
     dp.add_handler(stop_handler)
     dp.add_handler(start_handler)
+    dp.add_handler(button_handler)
     dp.add_handler(help_handler)
     dp.add_handler(admin_help_handler)
     dp.add_handler(admin_send_to_all_handler)
