@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
 
-logger.info("Successfully connected!")
+print("Successfully connected!")
 
 updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
 
