@@ -196,10 +196,7 @@ def clear(update, context):
     return bot_states.CHECK
 
 def check_query(update, context, user_data):
-    query = update.callback_query
-    print(user_data)
-    user_id = call.from_user.id
-    print(query.data)
+    print(query.user_data)
     user_tasks = sql_number_of_tasks(user_id)
     if query.data == '1':
         if user_tasks > 0:
