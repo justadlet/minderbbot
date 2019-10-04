@@ -196,7 +196,19 @@ def clear(update, context):
     return bot_states.CHECK
 
 def check_query(update, context):
-    print(update.effective_user.id)
+    user_id = update.effective_user.id
+    user_tasks = sql_number_of_tasks(user_id)
+    if query.data == '1':
+        if user_tasks > 0:
+            sql_clear(user_id)
+            print("/clear: User with id: " + str(user_id) + " cleared all his tasks")
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.clear_successfully_command_response, reply_markup = reply_markup)
+        else:
+            print("/clear: User with id: " + str(user_id) + " could not clear his tasks")
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
+    else:
+        context.bot.send_message(chat_id = update.message.chat_id, text = "Окей 😉", reply_markup = reply_markup)
+
     return ConversationHandler.END
 
 def add_task(update, context):
