@@ -432,7 +432,6 @@ def main():
     set_timer_handler = CommandHandler('set', set_timer)
     stop_handler = CommandHandler('stop', stop, pass_chat_data = True)
     start_handler = CommandHandler('start', start)
-    button_handler = CallbackQueryHandler(button)
     help_handler = CommandHandler('help', help)
     admin_help_handler = CommandHandler('admin_help', admin_help)
     admin_send_to_all_handler = CommandHandler('admin_send_to_all', admin_send_to_all, pass_args = True, pass_chat_data = True)
