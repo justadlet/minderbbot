@@ -150,13 +150,7 @@ def admin_send_to(update, context):
         user_id = context.args[0]
         text = context.args[1]
         ith = 0
-        for word in context.args:
-            ith = ith + 1
-            if ith > 2:
-                if word == '\n':
-                    text = text + '\n'
-                else:
-                    text = text + " " + word
+        text = context.args
         context.bot.send_message(chat_id = user_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
