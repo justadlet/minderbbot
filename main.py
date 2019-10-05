@@ -213,6 +213,33 @@ def check_query(update, context):
 
     return ConversationHandler.END
 
+def delete_task(update, context):
+    keyboard = []
+    user_id = update.message.from_user.id
+    tasks = sql_get_tasks(user_id)
+    ith = 0
+    for i in tasks:
+        ith = ith + 1
+        keyboard.append(InlineKeyboardButton(i[0], callback_data = str(ith)))
+    
+    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = sql_number_of_tasks(user_id)))
+    context.bot.send_message(chat_id = update.effective_user.id, text = "Hey", reply_markup = reply_keyboard)
+    
+def read_task_num(update, context):
+    task = update.message.text
+    try:
+        task_number = int(task)
+        user_id = update.message.from_user.id
+        number_of_tasks = sql_number_of_tasks(user_id)
+        if task_number < 1 or task_number > number_of_tasks:
+            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_wrong_number_command_response, reply_markup = reply_markup)
+            return ConversationHandler.END
+        sql_delete(user_id, task_number)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_successfully_command_response, reply_markup = reply_markup)
+    except (IndexError, ValueError):
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_error_command_response, reply_markup = reply_markup)
+    return ConversationHandler.END
+
 def add_task(update, context):
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.add_task_write_task, reply_markup = reply_markup)
@@ -239,37 +266,7 @@ def read_new_task(update, context):
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.guide_set_timer, reply_markup = reply_markup)
     return ConversationHandler.END
 
-def delete_task(update, context):
-    if not context.args:
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_write_task, reply_markup = reply_markup)
-        return bot_states.READ_TASK_NUM
-    task = context.args[0]
-    try:
-        task_number = int(task)
-        user_id = update.message.from_user.id
-        number_of_tasks = sql_number_of_tasks(user_id)
-        if task_number < 1 or task_number > number_of_tasks:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_wrong_number_command_response, reply_markup = reply_markup)
-            return
-        sql_delete(user_id, task_number)
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_successfully_command_response, reply_markup = reply_markup)
-    except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_error_command_response, reply_markup = reply_markup)
 
-def read_task_num(update, context):
-    task = update.message.text
-    try:
-        task_number = int(task)
-        user_id = update.message.from_user.id
-        number_of_tasks = sql_number_of_tasks(user_id)
-        if task_number < 1 or task_number > number_of_tasks:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_wrong_number_command_response, reply_markup = reply_markup)
-            return ConversationHandler.END
-        sql_delete(user_id, task_number)
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_successfully_command_response, reply_markup = reply_markup)
-    except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.delete_task_error_command_response, reply_markup = reply_markup)
-    return ConversationHandler.END
 def set_timer(update, context):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
