@@ -147,14 +147,20 @@ def admin_send_to_all(update, context):
 
 @restricted
 def admin_send_to(update, context):
-    if len(context.args) < 2:
-        update.effective_message.reply_text(bot_messages.send_to_error_command_response) 
-        return 
-    user_id = context.args[0]
-    text = " ".join(context.args[:1])
-    context.bot.send_message(chat_id = user_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
-    context.bot.send_message(chat_id = user_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
-    
+    try:
+        user_id = context.args[0]
+        text = context.args[1]
+        ith = 0
+        for word in context.args:
+            ith = ith + 1
+            if ith > 2:
+                text = text + " " + word
+        text = text.replace('\\n', '\n')
+        context.bot.send_message(chat_id = user_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
+    except (IndexError, ValueError):
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_error_command_response, reply_markup = reply_markup)
+        
 @restricted
 def admin_get_distinct(update, context):
     distinct_users_number = sql_get_distinct_ids()
