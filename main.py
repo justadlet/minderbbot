@@ -137,7 +137,6 @@ def admin_send_to_all(update, context):
             ith = ith + 1
             if ith > 1:
                 text = text + " " + word
-        text.decode()
         for sending_id in user_ids:
             context.bot.send_message(chat_id = sending_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
             time.sleep(0.035)
@@ -155,7 +154,6 @@ def admin_send_to(update, context):
             ith = ith + 1
             if ith > 2:
                 text = text + " " + word
-        text.decode()
         context.bot.send_message(chat_id = user_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
