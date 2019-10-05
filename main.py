@@ -138,7 +138,7 @@ def admin_send_to_all(update, context):
             if ith > 1:
                 text = text + " " + word
         for sending_id in user_ids:
-            context.bot.send_message(chat_id = sending_id, text = text, reply_markup = reply_markup)
+            context.bot.send_message(chat_id = sending_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
             time.sleep(0.035)
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
@@ -294,7 +294,7 @@ def set_timer(update, context):
             context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.error_time_command_response, reply_markup = reply_markup)
             return
         if 'job' in context.chat_data:
-            updated = 1;
+            updated = 1
             old_job = context.chat_data['job']
             old_job.schedule_removal()
 
@@ -319,7 +319,7 @@ def read_minutes(update, context):
             context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.error_time_command_response, reply_markup = reply_markup)
             return ConversationHandler.END
         if 'job' in context.chat_data:
-            updated = 1;
+            updated = 1
             old_job = context.chat_data['job']
             old_job.schedule_removal()
         user_id = update.message.from_user.id
