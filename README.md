@@ -12,9 +12,8 @@
 
 ## ✨ Features
 
-- Notifications about new grades
-- Notifications about new webworks
-- Reminders of upcoming lectures
+- Keep your notes
+- Reminding about your tasks
 
 ## 💻 Stack
 
