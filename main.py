@@ -222,15 +222,20 @@ def delete_task(update, context):
         ith = ith + 1
         keyboard.append(InlineKeyboardButton(i[0], callback_data = str(ith)))
     print(sql_number_of_tasks(user_id))
-    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = sql_number_of_tasks(user_id)))
+    reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = int(sql_number_of_tasks(user_id))))
     context.bot.send_message(chat_id = update.effective_user.id, text = "Hey", reply_markup = reply_keyboard)
     return bot_states.CHECK_DELETE
     
 def check_delete_query(update, context):
     user_id = update.effective_user.id
     query = update.callback_query
-    print(query.data)
-
+    task_number = int(query.data)
+    number_of_tasks = sql_number_of_tasks(user_id)
+    if task_number < 1 or task_number > number_of_tasks:
+        context.bot.send_message(chat_id = update.effective_user.chat_id, text = bot_messages.delete_task_wrong_number_command_response, reply_markup = reply_markup)
+        return ConversationHandler.END
+    sql_delete(user_id, task_number)
+    context.bot.send_message(chat_id = update.effective_user.chat_id, text = bot_messages.delete_task_successfully_command_response, reply_markup = reply_markup)
     return ConversationHandler.END
 
 def read_task_num(update, context):
