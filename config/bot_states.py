@@ -5,4 +5,5 @@
   READ_FEEDBACK,
   READ_CLEAR_CONFIRMATION,
   CHECK
-) = range(6)
+  CHECK_DELETE
+) = range(7)

@@ -221,10 +221,18 @@ def delete_task(update, context):
     for i in tasks:
         ith = ith + 1
         keyboard.append(InlineKeyboardButton(i[0], callback_data = str(ith)))
-    
+    print(sql_number_of_tasks(user_id))
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = sql_number_of_tasks(user_id)))
     context.bot.send_message(chat_id = update.effective_user.id, text = "Hey", reply_markup = reply_keyboard)
+    return bot_states.CHECK_DELETE
     
+def check_delete_query(update, context):
+    user_id = update.effective_user.id
+    query = update.callback_query
+    print(query.data)
+
+    return ConversationHandler.END
+
 def read_task_num(update, context):
     task = update.message.text
     try:
@@ -396,7 +404,7 @@ def main():
         entry_points = [CommandHandler('delete', delete_task)],
 
         states = {
-            bot_states.READ_TASK_NUM: [MessageHandler(Filters.text, read_task_num)]
+            bot_states.CHECK_DELETE: [CallbackQueryHandler(check_delete_query)]
         },
 
         fallbacks = [CommandHandler('cancel', cancel)]
