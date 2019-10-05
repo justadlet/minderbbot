@@ -217,13 +217,17 @@ def delete_task(update, context):
     keyboard = []
     user_id = update.message.from_user.id
     tasks = sql_get_tasks(user_id)
+    number_of_tasks = sql_number_of_tasks(user_id)
+    if number_of_tasks == 0:
+        context.bot.send_message(chat_id = update.effective_user.id, text = bot_messages.tasks_empty_command_response, reply_markup = reply_markup)
+        return ConversationHandler.END
     ith = 0
     for i in tasks:
         ith = ith + 1
         keyboard.append(InlineKeyboardButton(i[0], callback_data = str(ith)))
     print(sql_number_of_tasks(user_id))
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
-    context.bot.send_message(chat_id = update.effective_user.id, text = "Hey", reply_markup = reply_keyboard)
+    context.bot.send_message(chat_id = update.effective_user.id, text = bot_messages.delete_task_write_task, reply_markup = reply_keyboard)
     return bot_states.CHECK_DELETE
     
 def check_delete_query(update, context):
