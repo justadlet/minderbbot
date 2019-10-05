@@ -225,7 +225,6 @@ def delete_task(update, context):
     for i in tasks:
         ith = ith + 1
         keyboard.append(InlineKeyboardButton(i[0], callback_data = str(ith)))
-    print(sql_number_of_tasks(user_id))
     reply_keyboard = InlineKeyboardMarkup(build_menu(keyboard, n_cols = 1))
     context.bot.send_message(chat_id = update.effective_user.id, text = bot_messages.delete_task_write_task, reply_markup = reply_keyboard)
     return bot_states.CHECK_DELETE
