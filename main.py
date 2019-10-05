@@ -137,6 +137,7 @@ def admin_send_to_all(update, context):
             ith = ith + 1
             if ith > 1:
                 text = text + " " + word
+        text = text.replace('\\n', '\n')
         for sending_id in user_ids:
             context.bot.send_message(chat_id = sending_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
             time.sleep(0.035)
