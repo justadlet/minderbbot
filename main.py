@@ -123,7 +123,6 @@ def get_text(user_id):
     return text
 
 def cancel(update, context):
-    user_id = update.message.from_user.id
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.cancelled_successfully, reply_markup = reply_markup)
     return ConversationHandler.END
 
@@ -235,7 +234,6 @@ def check_delete_query(update, context):
     user_id = update.effective_user.id
     query = update.callback_query
     task_number = int(query.data)
-    number_of_tasks = sql_number_of_tasks(user_id)
     sql_delete(user_id, task_number)
     query.edit_message_text(text = bot_messages.delete_task_successfully_command_response)
     return ConversationHandler.END
@@ -364,7 +362,6 @@ def read_feedback(update, context):
 
 def show_tasks(update, context):
     user_id = update.message.from_user.id
-    tasks = sql_get_tasks(user_id)
     user_tasks = sql_number_of_tasks(user_id)
     if user_tasks > 0:
         whole_text = bot_messages.show_tasks_command_response + get_text(user_id)
