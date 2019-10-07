@@ -143,7 +143,7 @@ def admin_send_to_all(update, context):
                 context.bot.send_message(chat_id = sending_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
                 time.sleep(0.06)
             except (IndexError, ValueError):
-                ++cant_send;
+                cant_send = cant_send + 1
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response + str(cant_send) + "пользовотелям", reply_markup = reply_markup)
