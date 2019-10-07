@@ -137,12 +137,16 @@ def admin_send_to_all(update, context):
             if ith > 1:
                 text = text + " " + word
         text = text.replace('\\n', '\n')
+        cant_send = 0;
         for sending_id in user_ids:
-            context.bot.send_message(chat_id = sending_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
-            time.sleep(0.06)
+            try:
+                context.bot.send_message(chat_id = sending_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
+                time.sleep(0.06)
+            except (IndexError, ValueError):
+                ++cant_send;
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response, reply_markup = reply_markup)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response + str(cant_send) + "пользовотелям", reply_markup = reply_markup)
 
 @restricted
 def admin_send_to(update, context):
