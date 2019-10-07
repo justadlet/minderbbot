@@ -26,13 +26,22 @@ updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
 
 LIST_OF_ADMINS = [251961384]
 
-
 custom_keyboard = [['/add', '/delete'],
                    ['/set', '/stop'],
                    ['/clear', '/showtasks'],
                    ['/feedback', '/help'],
                    ['/admin_help']]
 reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = True)
+
+def log_text(debug_text):
+  print(debug_text)
+
+def send_message(context, chat_id, text):
+    try:
+        context.bot.send_message(chat_id = chat_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
+    except:
+        log_text('No such chat_id using a bot')
+
 
 def sql_table(connection):
     cur = connection.cursor()
@@ -139,11 +148,7 @@ def admin_send_to_all(update, context):
         text = text.replace('\\n', '\n')
         cant_send = 0;
         for sending_id in user_ids:
-            try:
-                context.bot.send_message(chat_id = sending_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
-                time.sleep(0.06)
-            except (IndexError, ValueError):
-                cant_send = cant_send + 1
+            send_message(context, sending_id, text)
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response + str(cant_send) + "пользовотелям", reply_markup = reply_markup)
@@ -159,7 +164,7 @@ def admin_send_to(update, context):
             if ith > 2:
                 text = text + " " + word
         text = text.replace('\\n', '\n')
-        context.bot.send_message(chat_id = user_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
+        send_message(context, user_id, text)
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_error_command_response, reply_markup = reply_markup)
