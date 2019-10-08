@@ -183,7 +183,7 @@ def alarm(context):
     user_id = job.context['user_id']
     user_tasks = get_text(user_id)
     whole_text = bot_messages.checking_todo_list_words + user_tasks + bot_messages.checked_todo_list_words
-    context.bot.send_message(job.context['chat_id'], text = whole_text, reply_markup = reply_markup)
+    send_message(context, user_id, whole_text)
 
 def build_menu(buttons,
                n_cols,
@@ -300,14 +300,12 @@ def set_timer(update, context):
         updated = 0
         due = int(text)
         if due < 1 or due > 1440:
-            context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.error_time_command_response, reply_markup = reply_markup)
+            send_message(context, chat_id, bot_messages.error_time_command_response)
             return
         if 'job' in context.chat_data:
             updated = 1
             old_job = context.chat_data['job']
             old_job.schedule_removal()
-
-        user_id = update.message.from_user.id
         new_job = context.job_queue.run_repeating(alarm, due * 60, context = {"chat_id": chat_id, "user_id": user_id})
         context.chat_data['job'] = new_job
         if updated is 0:
