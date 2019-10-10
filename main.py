@@ -22,8 +22,6 @@ logger = logging.getLogger(__name__)
 
 connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
 
-updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
-
 LIST_OF_ADMINS = [251961384]
 
 custom_keyboard = [['/add', '/delete'],
@@ -396,8 +394,11 @@ def help(update, context):
 def unknown(update, context):
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.unknown_command_response, reply_markup = reply_markup)
 
+
 def main():
+    updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
     dp = updater.dispatcher
+    
     feedback_handler = CommandHandler('feedback', feedback, pass_args = True, pass_chat_data = True)
     clear_handler = CommandHandler('clear', clear)
     delete_handler = CommandHandler('delete', delete_task, pass_args = True, pass_chat_data = True)
