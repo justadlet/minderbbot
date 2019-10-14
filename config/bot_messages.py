@@ -34,7 +34,7 @@ feedback_success_command_response = "Удачно отправил ваш фид
 
 feedback_error_command_response = "/feedback <текст>"
 
-send_to_all_success_command_response = "Удачно отправил ваше сообщение 🥳\n\nКроме "
+send_to_all_success_command_response = "Удачно отправил ваше сообщение 🥳"
 
 admin_help_command_response = "Доступные команды для админов: " \
 "\n" \

@@ -20,8 +20,6 @@ logging.basicConfig(format = '%(asctime)s - %(name)s - %(levelname)s - %(message
 
 logger = logging.getLogger(__name__)
 
-connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
-
 LIST_OF_ADMINS = [251961384]
 
 custom_keyboard = [['/add', '/delete'],
@@ -40,14 +38,11 @@ def send_message(context, chat_id, text):
     except:
         log_text('No such chat_id using a bot')
 
-
 def sql_table(connection):
     cur = connection.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS tasks(id BIGSERIAL PRIMARY KEY, user_id integer, task text)")
     connection.commit()
     cur.close()
-
-sql_table(connection)
 
 def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
@@ -144,12 +139,11 @@ def admin_send_to_all(update, context):
             if ith > 1:
                 text = text + " " + word
         text = text.replace('\\n', '\n')
-        cant_send = 0;
         for sending_id in user_ids:
             send_message(context, sending_id, text)
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_success_command_response, reply_markup = reply_markup)
     except (IndexError, ValueError):
-        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response + str(cant_send) + "пользовотелям", reply_markup = reply_markup)
+        context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.send_to_all_error_command_response, reply_markup = reply_markup)
 
 @restricted
 def admin_send_to(update, context):
@@ -394,11 +388,12 @@ def help(update, context):
 def unknown(update, context):
     context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.unknown_command_response, reply_markup = reply_markup)
 
-
 def main():
     updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
     dp = updater.dispatcher
-    
+    connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
+    sql_table(connection)
+
     feedback_handler = CommandHandler('feedback', feedback, pass_args = True, pass_chat_data = True)
     clear_handler = CommandHandler('clear', clear)
     delete_handler = CommandHandler('delete', delete_task, pass_args = True, pass_chat_data = True)
