@@ -29,6 +29,8 @@ custom_keyboard = [['/add', '/delete'],
                    ['/admin_help']]
 reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = True)
 
+connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
+
 def log_text(debug_text):
   print(debug_text)
 
@@ -391,7 +393,6 @@ def unknown(update, context):
 def main():
     updater = Updater(token = os.environ['BOT_TOKEN'], use_context = True)
     dp = updater.dispatcher
-    connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
     sql_table(connection)
 
     feedback_handler = CommandHandler('feedback', feedback, pass_args = True, pass_chat_data = True)
