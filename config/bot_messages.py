@@ -58,7 +58,7 @@ stopped_successfully_command_response = "Таймер выключен 😴"
 
 did_not_set_command_response = "Таймер не был включен 😴"
 
-error_time_command_response = "Количество минут должно быть от 1 до 1440 🤨"
+error_time_command_response = "Количество минут должно быть от 1 до 14400 🤨"
 
 set_timer_successfully_command_response = "Вы удачно завели таймер 🥳." \
 "\n" \
