@@ -120,12 +120,6 @@ def cancel(update, context):
 def admin_send_to_all(update, context):
     try:
         user_ids = sql_get_ids()
-        # text = context.args[0]
-        # ith = 0
-        # for word in context.args:
-        #     ith = ith + 1
-        #     if ith > 1:
-        #         text = text + " " + word
         text = ' '.join(context.args)
         text = text.replace('\\n', '\n')
         for sending_id in user_ids:
@@ -236,12 +230,6 @@ def add_task(update, context):
     if not context.args:
         context.bot.send_message(chat_id = update.message.chat_id, text = bot_messages.add_task_write_task, reply_markup = reply_markup)
         return bot_states.READ_NEW_TASK
-    # new_task = context.args[0]
-    # ith = 0
-    # for word in context.args:
-    #     ith = ith + 1
-    #     if ith > 1:
-    #         new_task = new_task + " " + word
     new_task = ' '.join(context.args)
     user_id = update.message.from_user.id
     add_to_database(user_id, new_task)
