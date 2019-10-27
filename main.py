@@ -28,21 +28,25 @@ reply_markup = telegram.ReplyKeyboardMarkup(custom_keyboard, resize_keyboard = T
 connection = psycopg2.connect(database = DB_Database, user = DB_User, password = DB_Password, host = DB_Host, port = DB_Port)
 def log_text(debug_text):
   print(debug_text)
+
 def send_message(context, chat_id, text):
     try:
         context.bot.send_message(chat_id = chat_id, text = text, parse_mode = "Markdown", reply_markup = reply_markup)
     except:
         log_text('No such chat_id using a bot')
+
 def sql_table(connection):
     cur = connection.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS tasks(id BIGSERIAL PRIMARY KEY, user_id integer, task text)")
     connection.commit()
     cur.close()
+
 def sql_table_reminders(connection):
     cur = connection.cursor()
     cur.execute("CREATE TABLE IF NOT EXISTS reminder(user_id integer, due integer, next_time string)")
     connection.commit()
     cur.close()
+
 def sql_insert(connection, user_id, new_task):
     cur = connection.cursor()
     cur.execute("INSERT INTO tasks(user_id, task) VALUES(%s, %s)", (user_id, new_task, ))
